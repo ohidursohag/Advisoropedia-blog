@@ -1,13 +1,39 @@
-import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import Container from "../Components/Utils/Container";
+import SignUpForm from "../Components/Authenticate/SignUpForm";
+import LoginForm from "../Components/Authenticate/LoginForm";
 
 const Authentication = () => {
-
+  const [register, setRegister] = useState(false);
   return (
-    <div>
-       <div> This is Authentication </div>
-       <Outlet/>
-    </div>
-  )
+    <Container className={"flex justify-center items-center min-h-screen"}>
+      <div className="w-[340px] sm:w-[500px] md:w-[750px] lg:w-[800px] mx-auto bg-white flex items-center relative overflow-hidden shadow-xl">
+        {/* register form  */}
+        <SignUpForm register={register} setRegister={setRegister}/>
+        {/* Sliding image part */}
+        <div
+          className={`absolute w-2/5 z-50 top-0 hidden h-full duration-500 items-center justify-center bg-[#8EA7E9] md:flex 
+        ${register?'translate-x-[150%]  duration-500':''}
+        `}>
+          <div className={`absolute -bottom-2 h-16 w-16 rounded-full bg-gradient-to-br duration-500  from-white via-[#9eb6f8] to-[#6585dd] ${register?'-translate-x-[100%]':'translate-x-[100%] '}`}/>
+          <div className={`absolute -top-2 h-16 w-16 rounded-full bg-gradient-to-br duration-500  from-white via-[#9eb6f8] to-[#6585dd] ${register?'-translate-x-[100%]':'translate-x-[100%] '}`}/>
+          <div className={`absolute  h-14 w-14 top-[50%] -translate-y-1/2 rounded-full bg-gradient-to-br from-white via-[#9eb6f8] to-[#6585dd] transition-all duration-500 ${register?'-translate-x-[275%]':'translate-x-[275%] '}`}/>
+          <div className="absolute left-[50%] top-[22%] h-24 w-24 -translate-x-1/2 rounded-full  bg-gradient-to-br from-white via-[#9eb6f8] to-[#6585dd]"/>
+          <div className="absolute left-[50%] bottom-[22%] h-24 w-24 -translate-x-1/2 rounded-full  bg-gradient-to-br from-white via-[#9eb6f8] to-[#6585dd]"/>
+          <div className="space-y-2 text-center">
+            <h2 className="text-3xl font-medium text-white/80 ">
+              {register?'Join with us':'Wellcome Back'}
+            </h2>
+            <p className="animate-pulse text-sm text-white/60">
+              Please Enter You Information
+            </p>
+          </div>
+        </div>
+        {/* login form */}
+        <LoginForm register={register} setRegister={setRegister}/>
+      </div>
+    </Container>
+  );
 };
 
 export default Authentication;
