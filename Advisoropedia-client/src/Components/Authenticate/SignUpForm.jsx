@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import toast from "react-hot-toast";
 import { uploadImage } from "../../api/imageUpload";
 import { userRegistration } from "../../api/auth";
+import Swal from 'sweetalert2'
 // validation Schema
 const validationSchema = yup.object({
   fullName: yup.string().min(3).required("name is required"),
@@ -60,7 +61,7 @@ const SignUpForm = ({ register: signup, setRegister }) => {
   } = useForm({ resolver: yupResolver(validationSchema) });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     const toastId = toast.loading("Registering...");
     try {
       const fullName = data?.fullName;
@@ -72,7 +73,7 @@ const SignUpForm = ({ register: signup, setRegister }) => {
       if (profileImage.length>0) {
         const imageUploadResponse = await uploadImage(profileImage[0]);
         profileImage=imageUploadResponse?.data?.url;
-        console.log(imageUploadResponse, profileImage);
+        // console.log(imageUploadResponse, profileImage);
       }else{
         profileImage='https://i.ibb.co/9GnKd6T/Placeholder.jpg';
       }
@@ -88,18 +89,38 @@ const SignUpForm = ({ register: signup, setRegister }) => {
       const registrationResponse = await userRegistration(
         userRegistrationData
       );
-      console.log(registrationResponse);
+      // console.log(registrationResponse);
       if (registrationResponse.error) {
         toast.error(registrationResponse.message, { id: toastId });
       } else {
+        // Well come Message popup
+        Swal.fire({
+          icon:'success',
+          title: "Welcome to Advisoropedia",
+          text:'A wellcome Message sent to your email',
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown 
+              animate__faster
+            `
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `
+          }
+        });
         toast.success(registrationResponse.message, { id: toastId });
         setRegister(!signup)
+        reset()
       }
     } catch (error) {
       toast.error(error.message, { id: toastId });
     }
   };
-  // console.log(errors)
   return (
     <>
       <form

@@ -1,23 +1,27 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import toast from 'react-hot-toast';
+import { userLogin } from '../../api/auth';
+import useAuth from '../../hooks/useAuth';
 // validation Schema
 const loginFromValidation = yup.object({
   email: yup
   .string()
   .required("email is required")
   .email("invalid email format"),
-  profileImage:yup.mixed(),
   password: yup
     .string()
     .required("password is required")
 })
 const LoginForm = ({register:signup, setRegister}) => {
   const [showPass, setShowPass] = useState(false);
+  const {currentUser} = useAuth()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,7 +29,28 @@ const LoginForm = ({register:signup, setRegister}) => {
   } = useForm({ resolver: yupResolver(loginFromValidation) });
   // hnadle submit login info
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
+    const toastId = toast.loading("Login in progress...");
+    const userLoginData = {
+      email: data.email,
+      password: data.password,
+    };
+    
+    try {
+      const loginResponse = await userLogin(userLoginData);
+      console.log(loginResponse)
+      if (loginResponse.success) {
+        toast.success("Successfully Logged In", { id: toastId });     
+        currentUser(loginResponse.token);
+        navigate("/", { replace: true });
+      } else {
+        toast.error("Something Went wrong", { id: toastId });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message, { id: toastId });
+    }
+
   };
   return (
     <>
