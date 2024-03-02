@@ -1,11 +1,14 @@
 /* eslint-disable no-useless-escape */
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import toast from "react-hot-toast";
+import { uploadImage } from "../../api/imageUpload";
+import { userRegistration } from "../../api/auth";
 // validation Schema
 const validationSchema = yup.object({
   fullName: yup.string().min(3).required("name is required"),
@@ -13,7 +16,7 @@ const validationSchema = yup.object({
     .string()
     .required("email is required")
     .email("invalid email format"),
-    profileImage:yup.mixed(),
+  profileImage: yup.mixed(),
   password: yup
     .string()
     .required("password is required")
@@ -35,23 +38,66 @@ const validationSchema = yup.object({
     .string()
     .required("you have to confirm the password")
     .oneOf([yup.ref("password")], "Password must be same"),
-    termsAndCondition:yup.boolean().test('termsAndCondition','you have to agree with our terms & conditions',(val) => {
-      // console.log(val, "yup singleCheckbox result");
-      return val;
-    })
+  termsAndCondition: yup
+    .boolean()
+    .test(
+      "termsAndCondition",
+      "you have to agree with our terms & conditions",
+      (val) => {
+        // console.log(val, "yup singleCheckbox result");
+        return val;
+      }
+    ),
 });
 const SignUpForm = ({ register: signup, setRegister }) => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
-
   const {
     register,
     handleSubmit,
-    formState: { errors },reset
+    formState: { errors },
+    reset,
   } = useForm({ resolver: yupResolver(validationSchema) });
 
   const onSubmit = async (data) => {
     console.log(data);
+    const toastId = toast.loading("Registering...");
+    try {
+      const fullName = data?.fullName;
+      const email = data?.email;
+      let profileImage = data?.profileImage;
+      const password = data?.password;
+      console.log(profileImage[0])
+      // upload profile Image
+      if (profileImage.length>0) {
+        const imageUploadResponse = await uploadImage(profileImage[0]);
+        profileImage=imageUploadResponse?.data?.url;
+        console.log(imageUploadResponse, profileImage);
+      }else{
+        profileImage='https://i.ibb.co/9GnKd6T/Placeholder.jpg';
+      }
+
+      const userRegistrationData = {
+        fullName,
+        email,
+        profileImage,
+        password,
+        userRole:'user',
+      };
+      console.log(userRegistrationData);
+      const registrationResponse = await userRegistration(
+        userRegistrationData
+      );
+      console.log(registrationResponse);
+      if (registrationResponse.error) {
+        toast.error(registrationResponse.message, { id: toastId });
+      } else {
+        toast.success(registrationResponse.message, { id: toastId });
+        setRegister(!signup)
+      }
+    } catch (error) {
+      toast.error(error.message, { id: toastId });
+    }
   };
   // console.log(errors)
   return (
@@ -64,19 +110,18 @@ const SignUpForm = ({ register: signup, setRegister }) => {
         <h1 className="backdrop-blur-sm text-2xl lg:text-4xl pb-4 text-center font-medium">
           Register
         </h1>
-       
+
         <div className="space-y-2">
           {/* name */}
           <div>
             <label htmlFor="fullName" className="block">
-             Full Name <span className="text-red-600">*</span>
+              Full Name <span className="text-red-600">*</span>
             </label>
             <input
               id="fullName"
               type="text"
-              
               {...register("fullName")}
-              placeholder={errors.fullName ? 'name is required' : "your name"}
+              placeholder={errors.fullName ? "name is required" : "your name"}
               className={`px-3 py-2 block w-full outline-none border rounded-md  ${
                 errors.fullName
                   ? "border-red-600 text-red-600 placeholder:text-red-600 placeholder:text-sm"
@@ -113,21 +158,21 @@ const SignUpForm = ({ register: signup, setRegister }) => {
           </div>
           {/* Profile Image */}
           <div className="">
-                  <label htmlFor="image" className=" block ">
-                    Select Image
-                  </label>
-                  <input
-                    type="file"
-                    id="image"
-                    {...register("profileImage")}
-                    accept="image/*"
-                    className=" file:mr-5 file:border-none file:px-3 file:py-2 file:bg-sky-300 block w-full border border-dashed rounded-md border-black file:h-full"
-                  />
-                  {/* {errors.profileImage?.type === "required" && (
+            <label htmlFor="image" className=" block ">
+              Select Image
+            </label>
+            <input
+              type="file"
+              id="image"
+              {...register("profileImage")}
+              accept="image/*"
+              className=" file:mr-5 file:border-none file:px-3 file:py-2 file:bg-sky-300 block w-full border border-dashed rounded-md border-black file:h-full"
+            />
+            {/* {errors.profileImage?.type === "required" && (
                     <p className="text-red-500 text-sm">required</p>
                   )} */}
-                </div>
-          {/* Password */}    
+          </div>
+          {/* Password */}
           <div className="relative">
             <label htmlFor="password" className="block">
               Password <span className="text-red-600">*</span>
@@ -198,23 +243,31 @@ const SignUpForm = ({ register: signup, setRegister }) => {
             </div>
           </div>
           {/* privecy check box */}
-        <div className="mb-3">
-          <div className="flex items-center gap-2 justify-center">
-          <input type="checkbox" name="termsAndCondition" id="termsAndCondition" {...register('termsAndCondition')}/>
-          <label htmlFor="termsAndCondition" className="block">
-              Agree with our <Link to={'#'} className="text-sky-300">Terms & Conditions</Link>
-            </label>
-          </div>
-          {errors.termsAndCondition? (
+          <div className="mb-3">
+            <div className="flex items-center gap-2 justify-center">
+              <input
+                type="checkbox"
+                name="termsAndCondition"
+                id="termsAndCondition"
+                {...register("termsAndCondition")}
+              />
+              <label htmlFor="termsAndCondition" className="block">
+                Agree with our{" "}
+                <Link to={"#"} className="text-sky-300">
+                  Terms & Conditions
+                </Link>
+              </label>
+            </div>
+            {errors.termsAndCondition ? (
               <p className="text-red-600 text-sm text-center">
                 {errors.termsAndCondition?.message}
               </p>
             ) : (
               ""
             )}
+          </div>
         </div>
-        </div>
-        
+
         {/*submit button*/}
         <button
           type="submit"
@@ -226,7 +279,7 @@ const SignUpForm = ({ register: signup, setRegister }) => {
           <Link
             onClick={() => {
               setRegister(!signup);
-              reset()
+              reset();
             }}
             className="underline font-semibold">
             Login

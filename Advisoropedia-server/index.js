@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 5001;
 const dbUri = process.env.DB_uri;
 const app = express();
-
+const userModel = require("./models/user.js");
 // Middlewears
 const corsOptions = {
   origin: ["http://localhost:5173", "http://localhost:5174"],
@@ -17,6 +17,25 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// Verify Access Token
+const verifyToken = async (req, res, next) => {
+  const accessToken = req.cookies?.accessToken;
+  // console.log('Value of Access Token in MiddleWare -------->', accessToken);
+  if (!accessToken) {
+    return res.status(401).send({ message: "UnAuthorized Access", code: 401 });
+  }
+  jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+    if (error) {
+      return res
+        .status(401)
+        .send({ message: "UnAuthorized Access", code: 401 });
+    }
+    req.user = decoded;
+
+    next();
+  });
+};
 
 // Connect to MongoDB through Mongoose
 main().catch((err) => console.log(err));
@@ -30,7 +49,7 @@ app.post("/advisoropedia/api/v1/register", async (req, res) => {
     req.body;
 
   try {
-    // console.log('register hit')
+
     // Check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -46,8 +65,7 @@ app.post("/advisoropedia/api/v1/register", async (req, res) => {
       email,
       profileImage,
       password: hashedPassword,
-      userRole,
-      phoneNumber,
+      userRole
     };
     // console.log(newUser);
     // Save user to database
