@@ -24,23 +24,46 @@ async function main() {
   await mongoose.connect(dbUri);
 }
 
+// Register route
+app.post("/advisoropedia/api/v1/register", async (req, res) => {
+  const { fullName, email, profileImage, password, userRole } = req.body;
 
+  try {
+    // console.log('register hit')
+    // Check if user already exists
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.json({ error: true, message: "User already Registered" });
+    }
 
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // console.log('Hash',hashedPassword)
+    // Create new user
+    const newUser = {
+      fullName,
+      email,
+      profileImage,
+      password: hashedPassword,
+      userRole,
+      phoneNumber,
+    };
+    // console.log(newUser);
+    // Save user to database
+    await userModel.create(newUser);
 
-
-
-
-
-
-
-
+    return res.json({ error: false, message: "Registration successful" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 
 
 app.get("/", (req, res) => {
-   res.send("Hello from Advisoropedia Server..");
- });
- 
- app.listen(port, () => {
-   console.log(`Advisoropedia is running on port ${port}`);
- });
+  res.send("Hello from Advisoropedia Server..");
+});
+
+app.listen(port, () => {
+  console.log(`Advisoropedia is running on port ${port}`);
+});

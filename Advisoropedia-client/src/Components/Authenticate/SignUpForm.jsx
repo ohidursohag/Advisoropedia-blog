@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 // validation Schema
 const validationSchema = yup.object({
-  name: yup.string().min(3).required("name is required"),
+  fullName: yup.string().min(3).required("name is required"),
   email: yup
     .string()
     .required("email is required")
@@ -68,22 +68,22 @@ const SignUpForm = ({ register: signup, setRegister }) => {
         <div className="space-y-2">
           {/* name */}
           <div>
-            <label htmlFor="name" className="block">
-              Name <span className="text-red-600">*</span>
+            <label htmlFor="fullName" className="block">
+             Full Name <span className="text-red-600">*</span>
             </label>
             <input
-              id="name"
+              id="fullName"
               type="text"
               
-              {...register("name")}
-              placeholder={errors.name ? 'name is required' : "your name"}
+              {...register("fullName")}
+              placeholder={errors.fullName ? 'name is required' : "your name"}
               className={`px-3 py-2 block w-full outline-none border rounded-md  ${
-                errors.name
+                errors.fullName
                   ? "border-red-600 text-red-600 placeholder:text-red-600 placeholder:text-sm"
                   : "border-black placeholder:text-black"
               }`}
             />
-            {errors.name?.type !== "required" ? (
+            {errors.fullName?.type !== "required" ? (
               <p className="text-red-600 text-sm">{errors.name?.message}</p>
             ) : (
               ""
