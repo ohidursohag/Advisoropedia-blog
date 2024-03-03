@@ -9,6 +9,7 @@ const port = process.env.PORT || 5001;
 const dbUri = process.env.DB_uri;
 const app = express();
 const userModel = require("./models/user.js");
+const postModel = require('./models/posts.js')
 // Middlewears
 const corsOptions = {
   origin: ["http://localhost:5173", "http://localhost:5174"],
@@ -40,16 +41,14 @@ const verifyToken = async (req, res, next) => {
 // Connect to MongoDB through Mongoose
 main().catch((err) => console.log(err));
 async function main() {
-  await mongoose.connect(dbUri);
+  await mongoose.connect(dbUri, { dbName: "advisoropediaDB" });
 }
 
 // Register route
 app.post("/advisoropedia/api/v1/register", async (req, res) => {
-  const { fullName, email, profileImage, password, userRole } =
-    req.body;
+  const { fullName, email, profileImage, password, userRole } = req.body;
 
   try {
-
     // Check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -65,7 +64,7 @@ app.post("/advisoropedia/api/v1/register", async (req, res) => {
       email,
       profileImage,
       password: hashedPassword,
-      userRole
+      userRole,
     };
     // console.log(newUser);
     // Save user to database
@@ -76,7 +75,6 @@ app.post("/advisoropedia/api/v1/register", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 // Login route
 app.post("/advisoropedia/api/v1/login", async (req, res) => {
@@ -112,7 +110,7 @@ app.post("/advisoropedia/api/v1/login", async (req, res) => {
       .cookie("accessToken", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       })
       .send({ success: true, token });
   } catch (error) {
@@ -128,12 +126,33 @@ app.get("/advisoropedia/api/v1/logout", async (req, res) => {
       .clearCookie("accessToken", {
         maxAge: 0,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       })
       .send({ success: true });
   } catch (error) {
     return res.send({ error: true, error: error.message });
   }
+});
+
+// get All Posts with
+app.get("/advisoropedia/api/v1/all-posts", async (req, res) => {
+  const limit = req.query.limit;
+  const page = req.query.page;
+  const search = req.query.search;
+  const { tags } = req.query;
+  const query = {  };
+  if (tags) query.tags = tags;
+  if (search) {
+    // Add search conditions to the query
+    query.$or = [{ title: { $regex: search, $options: "i" } }];
+  }
+  const skip = (page - 1) * limit || 0;
+  const result = await postModel.find(query)
+    .sort({ publish_date: -1 })
+    .skip(skip)
+    .limit(limit);
+    // console.log(result)
+  res.send(result);
 });
 
 
@@ -143,13 +162,11 @@ app.get("/advisoropedia/api/v1/logout", async (req, res) => {
 
 
 
-
-
-
 app.get("/", (req, res) => {
-   res.send("Hello from Advisoropedia Server..");
- });
- 
- app.listen(port, () => {
-   console.log(`Advisoropedia is running on port ${port}`);
- });
+  res.send("Hello from Advisoropedia Server..");
+});
+
+app.listen(port, () => {
+  console.log(`Advisoropedia is running on port ${port}`);
+});
+

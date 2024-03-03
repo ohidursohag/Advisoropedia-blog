@@ -13,7 +13,7 @@ const DropDownMenu = ({ openDropdown }) => {
 
   return (
     <div
-      className={`absolute top-[52px] lg:top-[71px] -z-50 bg-contain bg-center right-0 bg-blend-overlay  shadow-[0px_0px_5px_1px_rgba(0,0,0,.2)] rounded-b-lg  duration-500 hidden lg:block ${
+      className={`absolute top-[52px]  lg:top-[71px] bg-white -z-50 bg-contain bg-center right-0 bg-blend-overlay  shadow-[0px_0px_5px_1px_rgba(0,0,0,.2)] rounded-b-lg  duration-500 hidden lg:block ${
         user ? "" : ""
       } w-[250px]
     ${
@@ -32,7 +32,7 @@ const DropDownMenu = ({ openDropdown }) => {
                 alt="profile image"
               />
             </figure>
-            <p className="text-lg text-center px-2 font-medium text-orange-400">
+            <p className="text-lg text-center px-2 font-medium text-">
               {user?.fullName.slice(0, 16)}
             </p>
             <p className="text-gray-500 text-center mb-5">{user?.email}</p>
@@ -62,12 +62,13 @@ const DropDownMenu = ({ openDropdown }) => {
         ) : (
           <>
             <hr className="border-gray-500" />
-            <MenuItem icon={TbLogin} label="Login" address="/login" />
+            <MenuItem icon={TbLogin} label="Login" address="/authentication" state={'login'} />
             <hr className="border-gray-500" />
             <MenuItem
               icon={MdOutlineAppRegistration}
-              label="Register"
-              address="/register"
+              label="Signup"
+              address="/authentication"
+              state={'signup'}
             />
             <hr className="border-gray-500" />
           </>

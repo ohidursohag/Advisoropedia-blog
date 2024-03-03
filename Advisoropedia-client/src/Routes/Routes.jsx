@@ -17,6 +17,10 @@ const appRoutes = createBrowserRouter([
         element:<Home/>
       },
       {
+        path:'/post/:id',
+        element:<ContactUs/>
+      },
+      {
         path:'/contact-us',
         element:<ContactUs/>
       },
@@ -31,7 +35,7 @@ const appRoutes = createBrowserRouter([
     ]
   },
   {
-   path:'/auth',
+   path:'/authentication',
    element:<Authentication/>
   }
 ]);

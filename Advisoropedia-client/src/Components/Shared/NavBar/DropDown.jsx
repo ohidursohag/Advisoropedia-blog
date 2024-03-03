@@ -1,4 +1,3 @@
-
 import { AiOutlineBars } from "react-icons/ai";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -9,42 +8,38 @@ import useAuth from "../../../hooks/useAuth";
 const DropDown = ({ sideBarIsOpen, setSideBarIsOpen }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const { user } = useAuth();
-  const refWraper = useClickOutSide(setOpenDropdown)
-  console.log(sideBarIsOpen)
+  const refWraper = useClickOutSide(setOpenDropdown);
   return (
     <>
-      <div ref={refWraper}    
+      <div
+        ref={refWraper}
         onClick={() => {
           setSideBarIsOpen(!sideBarIsOpen);
           setOpenDropdown(!openDropdown);
         }}
-        className={`p-1 ${
-          user
-            ? "sm:px-2 bg-orange-300 text-white hover:shadow-[0px_2px_5px_0px_rgba(249,115,22)] hover:bg-orange-500"
-            : "sm:p-2 text-orange-300 "
-        } flex  items-center gap-2 rounded-full cursor-pointer  hover:scale-105 duration-300 relative`}>
-        <AiOutlineBars size={30} color="" />
+        className={`p-1 
+          "sm:p-2 text-black "
+        flex  items-center gap-2 rounded-full cursor-pointer   duration-300 relative`}>
+        <AiOutlineBars size={30} className={`${user ? "lg:hidden" : ""}`} />
         {user ? (
-          <div className="rounded-full w-[30px] h-[30px] bg-white hidden sm:block ">
+          <div className="rounded-full border border-black size-10 bg-gray-300 overflow-hidden hidden sm:block ">
             {/* Avatar */}
             <img
-              className="rounded-full object-cover border border-orange-500 object-center w-[30px] h-[30px]"
+              className="hover:scale-110 duration-300  object-center size-10"
               referrerPolicy="no-referrer"
               src={user?.profileImage}
               alt="profile"
-              height="30"
-              width="30"
             />
           </div>
         ) : (
           ""
         )}
       </div>
-      <div >
-      <DropDownMenu
-        openDropdown={openDropdown}
-        setOpenDropdown={setOpenDropdown}
-      />
+      <div>
+        <DropDownMenu
+          openDropdown={openDropdown}
+          setOpenDropdown={setOpenDropdown}
+        />
       </div>
     </>
   );

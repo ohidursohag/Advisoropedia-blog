@@ -8,16 +8,17 @@ import { Suspense, lazy, useState } from "react";
 import Container from "../../Utils/Container";
 import Logo from "../../Utils/Logo";
 import useClickOutSide from "../../../hooks/useClickOutSide";
+import useAuth from "../../../hooks/useAuth";
 const SideNavBar = lazy(() => import("../SideNavBar/SideNavBar"));
 
 const NavBar = () => {
-  const [sideBarIsOpen, setSideBarIsOpen] =useState(false)
+  const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
   const refWraper = useClickOutSide(setSideBarIsOpen);
-
+const {user} = useAuth()
   return (
     <div
       ref={refWraper}
-      className="bg-contain bg-center bg-blend-overlay left-0 top-0 w-full fixed z-[999]   shadow-[0px_2px_5px_0px_rgba(0,0,0,.2)] ">
+      className="bg-contain bg-center bg-blend-overlay left-0 top-0 w-full fixed z-[999] bg-white  shadow-[0px_2px_5px_0px_rgba(0,0,0,.2)] ">
       <Container>
         <div className="flex justify-between items-center relative py-2 ">
           <Logo />
@@ -25,9 +26,11 @@ const NavBar = () => {
             <NavLinks />
           </div>
           <div className="flex items-center gap-3">
-            <button className="text-orange-300 font-semibold text-lg hover:scale-110 duration-300 hover:text-orange-500">
+            {
+              user && <button className="text-gray-500 font-semibold text-lg hover:scale-110 duration-300 hover:text-black">
               <IoNotifications size={30} />
             </button>
+            }
 
             <div className="">
               <DropDown

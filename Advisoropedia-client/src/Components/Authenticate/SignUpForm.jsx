@@ -123,13 +123,13 @@ const SignUpForm = ({ register: signup, setRegister }) => {
   };
   return (
     <>
-      <form
+      <form id="signup"
         onSubmit={handleSubmit(onSubmit)}
         className={`p-8 w-[100%] duration-500 ${
           signup ? "lg:translate-x-0" : "-translate-x-full hidden md:block"
         } duration-500`}>
         <h1 className="backdrop-blur-sm text-2xl lg:text-4xl pb-4 text-center font-medium">
-          Register
+          Sign Up
         </h1>
 
         <div className="space-y-2">
@@ -296,15 +296,16 @@ const SignUpForm = ({ register: signup, setRegister }) => {
           Submit
         </button>
         <p className="mb-3 text-center">
-          Already have an account?
-          <Link
+          Already have an account? 
+          <button
+          type="button"
             onClick={() => {
               setRegister(!signup);
               reset();
             }}
-            className="underline font-semibold">
+            className="underline font-semibold pl-1">
             Login
-          </Link>
+          </button>
         </p>
         <hr />
         <button

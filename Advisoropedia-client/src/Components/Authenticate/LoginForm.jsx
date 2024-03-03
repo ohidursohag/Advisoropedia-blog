@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -54,7 +54,7 @@ const LoginForm = ({register:signup, setRegister}) => {
   };
   return (
     <>
-      <form
+      <form id='login'
       onSubmit={handleSubmit(onSubmit)}
           className={`p-4 lg:p-8 w-[100%] mr-0 ml-auto duration-500 ${
             signup ? "translate-x-full hidden md:block" : ""
@@ -117,7 +117,7 @@ const LoginForm = ({register:signup, setRegister}) => {
             </div>
           </div>
           </div>
-          {/* button type will be submit for handling form submission*/}
+          
           <button
             type="submit"
             className="py-2 px-5 mb-4 mx-auto mt-8 shadow-lg border rounded-md border-black block">
@@ -125,23 +125,24 @@ const LoginForm = ({register:signup, setRegister}) => {
           </button>
           <p className="mb-3 text-center">
             Don&apos;t have an account?
-            <Link
+            <button
+            type='button'
               onClick={() => {
                 setRegister(!signup);
                 reset()
               }}
-              className="underline font-semibold">
-              Register
-            </Link>
+              className="underline font-semibold pl-1">
+              Signup
+            </button>
           </p>
           <hr />
           <button
             type="button"
-            className="py-2 px-5 mb-4 mt-8 mx-auto block shadow-lg border rounded-md border-black">
+            className="group py-2 px-5 mb-4 mt-8 mx-auto block shadow-lg border rounded-md border-black hover:shadow-2xl duration-500">
             <svg
               viewBox="-0.5 0 48 48"
               version="1.1"
-              className="w-6 inline-block mr-3"
+              className="w-6 inline-block mr-3 group-hover:scale-110 duration-500"
               xmlns="http://www.w3.org/2000/svg"
               xmlnsXlink="http://www.w3.org/1999/xlink"
               fill="#000000">

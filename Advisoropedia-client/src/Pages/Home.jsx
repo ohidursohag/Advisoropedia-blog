@@ -1,10 +1,19 @@
+import AllPosts from "../Components/Home/AllPosts/AllPosts";
+import Banner from "../Components/Home/Banner";
+import Container from "../Components/Utils/Container";
+import Section from "../Components/Utils/Section";
 
 const Home = () => {
 
   return (
-    <div>
-       <div> This is Home </div>
-    </div>
+    <main>
+       <Container>
+            <Banner/>
+            <Section>
+              <AllPosts/>
+            </Section>
+       </Container>
+    </main>
   )
 };
 

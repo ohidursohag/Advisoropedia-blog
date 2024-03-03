@@ -3,7 +3,7 @@ import useAuth from "../../../hooks/useAuth";
 
 import { FaHome } from "react-icons/fa";
 import { BiSolidContact } from "react-icons/bi";
-import { MdOutlineAppRegistration} from "react-icons/md";
+import { MdOutlineAppRegistration } from "react-icons/md";
 import { TbLogout, TbLogin } from "react-icons/tb";
 import { BsInfoSquareFill } from "react-icons/bs";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -21,20 +21,20 @@ const SideNavBar = ({ sideBarIsOpen }) => {
         <div>
           {user && (
             <div className="my-5">
-              <figure className="rounded-full w-14 h-14 mx-auto overflow-hidden ring bg-gray-100 ring-orange-500">
+              <figure className="rounded-full w-14 h-14 mx-auto overflow-hidden ring bg-gray-100 ring-black">
                 <img
                   className="object-cover w-14 h-14 object-center"
                   src={user?.profileImage}
                   alt=""
                 />
               </figure>
-              <p className="text-lg text-center px-2 font-medium text-orange-400">
+              <p className="text-lg text-center px-2 font-medium text-b">
                 {user?.fullName.slice(0, 16)}
               </p>
               <p className="text-gray-500 text-center mb-5">{user?.email}</p>
+              <hr className="border-gray-500" />
             </div>
           )}
-          <hr className="border-gray-500" />
           <div
             className={`${user ? "" : "mt-10"} divide-y-[1px] divide-gray-500`}>
             <MenuItem icon={FaHome} label="Home" address="/" />
@@ -49,11 +49,7 @@ const SideNavBar = ({ sideBarIsOpen }) => {
               label="Contact Us"
               address="/contact-us"
             />
-            <MenuItem
-              icon={BiSolidContact}
-              label="Career"
-              address="/career"
-            />
+            <MenuItem icon={BiSolidContact} label="Career" address="/career" />
           </div>
 
           <hr className="border-gray-500" />
@@ -65,7 +61,7 @@ const SideNavBar = ({ sideBarIsOpen }) => {
               <MenuItem
                 icon={IoSettingsSharp}
                 label="Profile"
-                address="/dashboard/profile"
+                address="/profile"
               />
               <hr className="border-gray-500" />
               <div
@@ -79,12 +75,18 @@ const SideNavBar = ({ sideBarIsOpen }) => {
           ) : (
             <>
               <hr className="border-gray-500" />
-              <MenuItem icon={TbLogin} label="Login" address="/login" />
+              <MenuItem
+                icon={TbLogin}
+                label="Login"
+                address="/authentication"
+                state={"login"}
+              />
               <hr className="border-gray-500" />
               <MenuItem
                 icon={MdOutlineAppRegistration}
-                label="Register"
-                address="/register"
+                label="Signup"
+                address="/authentication"
+                state={"signup"}
               />
               <hr className="border-gray-500" />
             </>
