@@ -25,16 +25,16 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("token");
     await clearCookie();
-    return
+    setLoading(false)
   };
-  console.log(user);
+  // console.log('User ==>',user);
     // onAuthStateChange
     useEffect(() => {
       const storedToken = localStorage.getItem("token");
       if (storedToken) {
         currentUser(storedToken);
-        setLoading(false);
       }
+      setLoading(false);
     }, []);
 
   const authInfo = { user, loading, currentUser,logOut };

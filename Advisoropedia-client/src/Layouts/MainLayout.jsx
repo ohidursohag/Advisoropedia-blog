@@ -1,17 +1,19 @@
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import NavBar from "../Components/Shared/NavBar/NavBar";
-import useAuth from "../hooks/useAuth";
 import Footer from "../Components/Shared/Footer/Footer";
+import Loading from "../Components/Utils/Loading";
 
 const MainLayout = () => {
 
-   const {user} = useAuth()
-   console.log(user)
+  const navigation = useNavigation()
+
      return (
        <div className="font-kodo-mono">
        <NavBar/>
-        <Outlet/>
+        {
+          navigation.state === 'loading'?<Loading/>: <Outlet/>
+        }
         <Footer/>
        </div>
   )

@@ -1,9 +1,10 @@
+import Logo from "../Components/Utils/Logo";
 
 const AboutUs = () => {
 
   return (
-    <div>
-       <div> This is AboutUs </div>
+    <div className="h-screen flex justify-center items-center">
+       <Logo/>
     </div>
   )
 };

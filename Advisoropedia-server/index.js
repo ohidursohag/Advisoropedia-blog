@@ -9,10 +9,10 @@ const port = process.env.PORT || 5001;
 const dbUri = process.env.DB_uri;
 const app = express();
 const userModel = require("./models/user.js");
-const postModel = require('./models/posts.js')
+const postModel = require("./models/posts.js");
 // Middlewears
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:5174"],
+  origin: ["http://localhost:5173", "https://advisoropedia.vercel.app"],
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -81,7 +81,6 @@ app.post("/advisoropedia/api/v1/login", async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
   try {
-    console.log("Login end hit");
     // Find user by email
     const user = await userModel.findOne({ email });
     if (!user) {
@@ -90,7 +89,6 @@ app.post("/advisoropedia/api/v1/login", async (req, res) => {
 
     // Check password
     const validPassword = await bcrypt.compare(password, user.password);
-    console.log(validPassword);
     if (!validPassword) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -118,7 +116,6 @@ app.post("/advisoropedia/api/v1/login", async (req, res) => {
   }
 });
 
-
 // Clear access token when user logged out
 app.get("/advisoropedia/api/v1/logout", async (req, res) => {
   try {
@@ -140,27 +137,29 @@ app.get("/advisoropedia/api/v1/all-posts", async (req, res) => {
   const page = req.query.page;
   const search = req.query.search;
   const { tags } = req.query;
-  const query = {  };
+  const query = {};
   if (tags) query.tags = tags;
   if (search) {
     // Add search conditions to the query
     query.$or = [{ title: { $regex: search, $options: "i" } }];
   }
   const skip = (page - 1) * limit || 0;
-  const result = await postModel.find(query)
+  const result = await postModel
+    .find(query)
     .sort({ publish_date: -1 })
     .skip(skip)
     .limit(limit);
-    // console.log(result)
   res.send(result);
 });
 
-
-
-
-
-
-
+// grt single Post by Id
+app.get("/advisoropedia/api/v1/post/:id", async (req, res) => {
+  const id = req.params.id;
+  const result = await postModel.findOne({
+    _id: id,
+  });
+  res.send(result);
+});
 
 app.get("/", (req, res) => {
   res.send("Hello from Advisoropedia Server..");
@@ -169,4 +168,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Advisoropedia is running on port ${port}`);
 });
-

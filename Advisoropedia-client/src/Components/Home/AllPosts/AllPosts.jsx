@@ -38,12 +38,12 @@ const AllPosts = () => {
       },
     });
    //  console.log(hasNextPage, fetchNextPage)
-    console.log(data)
+   //  console.log(data)
     const posts = data?.pages.reduce((acc, page) => {
       return [...acc, ...page];
     }, []);
   
-    console.log(posts)
+   //  console.log(posts)
   
 
     const customStyles = {
@@ -61,7 +61,7 @@ const AllPosts = () => {
       }),
     };
     const handleSubmit = (e) => {
-      console.log(e.target.value);
+      // console.log(e.target.value);
       setSelectedCategory({
         value: "",
         label: "All Posts",
@@ -88,6 +88,7 @@ const AllPosts = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 justify-items-center  gap-5 xl:gap-10">
           <Skeleton />
           <Skeleton />
+          <Skeleton />
         </div>
       ) : posts?.length ? (
         <InfiniteScroll
@@ -96,6 +97,7 @@ const AllPosts = () => {
           hasMore={hasNextPage}
           loader={
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 justify-items-center  gap-5 xl:gap-10">
+              <Skeleton />
               <Skeleton />
               <Skeleton />
             </div>

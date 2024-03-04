@@ -16,7 +16,6 @@ const Authentication = () => {
       setRegister(false);      
     }
   }, [state]);
-  console.log(state);
   return (
     <Container className={"flex justify-center items-center min-h-screen"}>
       <div className="w-[340px] sm:w-[500px] md:w-[750px] lg:w-[800px] mx-auto bg-white flex items-center relative overflow-hidden shadow-xl">

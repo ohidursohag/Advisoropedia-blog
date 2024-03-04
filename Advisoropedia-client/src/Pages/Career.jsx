@@ -1,9 +1,10 @@
+import Logo from "../Components/Utils/Logo";
 
 const Career = () => {
 
   return (
-    <div>
-       <div> This is Career </div>
+    <div className="h-screen flex justify-center items-center">
+       <Logo/>
     </div>
   )
 };

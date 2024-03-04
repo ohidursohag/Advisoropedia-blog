@@ -1,25 +1,28 @@
 const Skeleton = () => {
    return (
-      <div className="w-[400px] md:w-[350px]  bg-slate-300/20 px-6 py-4 mx-auto rounded-2xl space-y-6 shadow-md animate-pulse">
-      {/* Card Image Skeleton */}
-      <div className="w-full h-[190px] bg-gray-400 rounded-2xl"/> 
-      {/* Card Heading and Rating Skeleton */}
-      <div className="space-y-2">
-        <div className="h-6 w-2/3 rounded bg-gray-300"/>
-        <div className="flex gap-1">
-          <div className="h-4 w-4 rounded bg-gray-300"/>
-          <div className="h-4 w-4 rounded bg-gray-300"/>
-          <div className="h-4 w-4 rounded bg-gray-300"/>
-          <div className="h-4 w-4 rounded bg-gray-300"/>
-          <div className="h-4 w-4 rounded bg-gray-300"/>
-        </div>
+      <div className='group max-w-[450px] cursor-pointer border-b-4 border-gray-300 rounded-3xl animate-pulse'>
+      <div className='rounded-3xl bg-gray-300 overflow-hidden mb-3 w-full relative h-[200px]'/>
+      
+      <div className='p-2'>
+       {/* content */}
+       <div className='flex items-center justify-between gap-2 '>
+         <div className='px-3 py-2 w-20 h-6 bg-gray-300  text-white rounded-lg inline-block'/>
+         <div className='flex items-center gap-2'>
+           <div className='size-8 bg-gray-300 rounded-xl overflow-hidden'/>
+           <div className='flex items-center gap-2'>
+           <p className='bg-gray-300 rounded-xl font-bold h-6 w-20'/>
+           <span>|</span>
+           <div className='bg-gray-300 rounded-xl h-6 w-20'/>
+           </div>
+         </div>
+       </div>
+       {/* title & description */}
+       <div className='my-3'>
+         <div className=' bg-gray-300 rounded-xl mb-2 w-full h-10'/>
+         <div className=' bg-gray-300 rounded-xl w-full h-[100px]'/>
+       </div>
       </div>
-      {/* Price and Add to Cart Button Skeleton */}
-      <div className="mt-5 flex justify-between items-center font-medium">
-        <div className="h-6 w-1/4 rounded bg-gray-300"></div>
-        <div className="h-10 w-24  bg-gray-700 rounded-lg"></div>
-      </div>
-    </div>    
+   </div>  
    );
  };
  
