@@ -5,8 +5,16 @@ export const userRegistration = async (userRegistrationData) => {
   const { data } = await axiosSecure.post(`/register`, userRegistrationData);
   return data;
 };
+// user Login
 export const userLogin = async (userLoginData) => {
   const { data } = await axiosSecure.post(`/login`, userLoginData);
+  return data;
+};
+
+// google login
+export const userLoginWithGoogle = async (googleLoginInfo) => {
+  // console.log(googleLoginInfo)
+  const { data } = await axiosSecure.post('/google-login',googleLoginInfo);
   return data;
 };
 

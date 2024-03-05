@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const postSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({ 
   article: {
     type: String,
   },
@@ -25,6 +25,8 @@ const postSchema = new mongoose.Schema({
   view_count: {
     type: Number,
   },
-});
+},
+{timestamps:true} 
+);
 
 module.exports = mongoose.model("posts", postSchema);

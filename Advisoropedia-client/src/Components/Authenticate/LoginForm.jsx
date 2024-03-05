@@ -20,7 +20,7 @@ const loginFromValidation = yup.object({
 })
 const LoginForm = ({register:signup, setRegister}) => {
   const [showPass, setShowPass] = useState(false);
-  const {currentUser} = useAuth()
+  const {currentUser,googleLogin} = useAuth()
   const navigate = useNavigate();
   const {
     register,
@@ -137,6 +137,7 @@ const LoginForm = ({register:signup, setRegister}) => {
           </p>
           <hr />
           <button
+          onClick={()=>googleLogin()}
             type="button"
             className="group py-2 px-5 mb-4 mt-8 mx-auto block shadow-lg border rounded-md border-black hover:shadow-2xl duration-500">
             <svg

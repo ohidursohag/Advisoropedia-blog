@@ -10,6 +10,8 @@ import toast from "react-hot-toast";
 import { uploadImage } from "../../api/imageUpload";
 import { userRegistration } from "../../api/auth";
 import Swal from 'sweetalert2'
+
+import useAuth from "../../hooks/useAuth";
 // validation Schema
 const validationSchema = yup.object({
   fullName: yup.string().min(3).required("name is required"),
@@ -53,6 +55,7 @@ const validationSchema = yup.object({
 const SignUpForm = ({ register: signup, setRegister }) => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const {googleLogin}=useAuth()
   const {
     register,
     handleSubmit,
@@ -121,6 +124,7 @@ const SignUpForm = ({ register: signup, setRegister }) => {
       toast.error(error.message, { id: toastId });
     }
   };
+
   return (
     <>
       <form id="signup"
@@ -187,7 +191,7 @@ const SignUpForm = ({ register: signup, setRegister }) => {
               id="image"
               {...register("profileImage")}
               accept="image/*"
-              className=" file:mr-5 file:border-none file:px-3 file:py-2 file:bg-sky-300 block w-full border border-dashed rounded-md border-black file:h-full"
+              className=" file:mr-5 file:border-none file:px-3 file:py-2 file:bg-gray-500 file:text-white block w-full border border-dashed rounded-md border-black file:h-full"
             />
             {/* {errors.profileImage?.type === "required" && (
                     <p className="text-red-500 text-sm">required</p>
@@ -272,9 +276,9 @@ const SignUpForm = ({ register: signup, setRegister }) => {
                 id="termsAndCondition"
                 {...register("termsAndCondition")}
               />
-              <label htmlFor="termsAndCondition" className="block">
+              <label htmlFor="termsAndCondition" className="block text-sm">
                 Agree with our{" "}
-                <Link to={"#"} className="text-sky-300">
+                <Link to={"#"} className="text-gray-500 hover:text-gray-800 underline font-medium duration-300">
                   Terms & Conditions
                 </Link>
               </label>
@@ -309,6 +313,7 @@ const SignUpForm = ({ register: signup, setRegister }) => {
         </p>
         <hr />
         <button
+        onClick={()=>googleLogin()}
           type="button"
           className="group py-2 px-5 mb-4 mt-8 mx-auto block shadow-lg border rounded-md border-black hover:shadow-2xl duration-500">
           <svg
